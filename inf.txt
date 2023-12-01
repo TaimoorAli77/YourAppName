@@ -1,0 +1,15 @@
+npm install -g expo-cli
+expo init YourAppName
+ cd YourAppName
+npx expo start
+
+Building for iOS and Android using EAS CLI
+$ npm install -g eas-cli
+✔️ Installed EAS CLI
+$ eas login
+✔️ Successfully authenticated
+$ eas build --platform ios
+✔️ Building iOS app...
+$ eas build --platform android
+
+
