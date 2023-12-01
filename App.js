@@ -6,7 +6,7 @@ export default function App() {
   //   console.log("Taimooor Clicked Me")
   // }
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, containerStyle]}>
       <Text> Welcome Taimoor Ali 2</Text>
       {/* <Text numberOfLines={1} onPress={() => { pressFunc() }}> Welcome Taimoor Ali 2 </Text> */}
 
@@ -47,6 +47,7 @@ export default function App() {
   );
 }
 
+const containerStyle = { backgroundColor: 'orange' }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
