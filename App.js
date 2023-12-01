@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, Image, StyleSheet, Text, View, TouchableWithoutFeedback, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { SafeAreaView, Image, StyleSheet, Text, View, TouchableWithoutFeedback, TouchableOpacity, TouchableHighlight, Button, Alert } from 'react-native';
 
 export default function App() {
   // const pressFunc = () => {
@@ -12,7 +12,14 @@ export default function App() {
 
       {/* <Image source={require('./assets/splash.png')} height={10} width={10}></Image> */}
 
-
+      <Button
+        // color={'green'}
+        title='my Btn'
+        onPress={() => Alert.alert("New Title Taimoor", "Are you ready ? Message ", [
+          { text: "Yes", onPress: () => { console.log("Yes") } },
+          { text: "No", onPress: () => { console.log("No") } }
+        ])}
+      />
 
       <TouchableHighlight onPress={() => console.log("Image Taped")}>
         <Image
