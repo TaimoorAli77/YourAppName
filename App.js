@@ -6,20 +6,26 @@ export default function App() {
       style={{
         backgroundColor: "white",
         flex: 1,
+        flexDirection: "row",  //horizontal
+        justifyContent: "center", //Main axis
+        alignItems:  "baseline"        , // secondary axis
+
       }}
     >
 
       <View
         style={{
           backgroundColor: "dodgerblue",
-          flex: 2,
+          width: 100,
+          height: 200
         }}
       />
 
       <View
         style={{
           backgroundColor: "gold",
-          flex: 1,
+          width: 100,
+          height: 300
         }}
       />
 
@@ -27,7 +33,8 @@ export default function App() {
       <View
         style={{
           backgroundColor: "tomato",
-          flex: 1,
+          width: 100,
+          height: 100
         }}
       />
 
