@@ -8,7 +8,7 @@ export default function App() {
         flex: 1,
         flexDirection: "row",  //horizontal
         justifyContent: "center", //Main axis
-        alignItems:  "baseline"        , // secondary axis
+        alignItems: "center", // secondary axis
 
       }}
     >
@@ -17,7 +17,8 @@ export default function App() {
         style={{
           backgroundColor: "dodgerblue",
           width: 100,
-          height: 200
+          height: 300,
+          alignSelf:"flex-start"
         }}
       />
 
@@ -25,7 +26,7 @@ export default function App() {
         style={{
           backgroundColor: "gold",
           width: 100,
-          height: 300
+          height: 200
         }}
       />
 
