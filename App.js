@@ -1,74 +1,40 @@
-import { View } from "react-native";
+import { ImageBackground, View, StyleSheet } from "react-native";
 
 export default function App() {
   return (
-    <View
-      style={{
-        backgroundColor: "white",
-        flex: 1,
-        flexDirection: "row",  //horizontal
-        justifyContent: "center", //Main axis
-        alignItems: "center", // secondary axis
-        // flexWrap: "wrap",  // with wrap on positions and shrink don't workout
-        alignContent: "center"
 
-      }}
+    <ImageBackground
+      source={require('./assets/images.png')}
+      style={styles.image}
+      resizeMode="cover"
     >
-
       <View
-        style={{
-          backgroundColor: "dodgerblue",
-          width: 100,
-          // flexBasis: 100, // as width or height
-          height: 100,
-          // flex: 1,  // short for flex grow or flex shrink
-          // flexShrink: 1
-          flex: -1
-          // alignSelf:"flex-start"
-        }}
-      />
-
-      <View
-        style={{
-          backgroundColor: "gold",
-          width: 100,
-          height: 100,
-          top: 20,
-          right: 20,
-
-          position: "relative"
-        }}
-      />
-
-
-      <View
-        style={{
-          backgroundColor: "tomato",
-          width: 100,
-          height: 100
-        }}
-      />
-      {/* <View
-        style={{
-          backgroundColor: "grey",
-          width: 100,
-          height: 100
-        }}
-      />
-      <View
-        style={{
-          backgroundColor: "greenyellow",
-          width: 100,
-          height: 100
-        }}
-      /> */}
-
-
-
-    </View>
-
-
+        style={styles.container}></View>
+      <View style={styles.bottomBtnOne} />
+    </ImageBackground>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    // flex: 1,
+    height: 60,
+    width: "100%",
+    backgroundColor: "dodgerblue",
+
+  },
+  image: {
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "flex-end"
+  },
+  bottomBtnOne: {
+    height: 60,
+    width: "100%",
+    backgroundColor: "black",
+  },
+})
 
 
