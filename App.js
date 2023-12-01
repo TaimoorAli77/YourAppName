@@ -13,6 +13,16 @@ export default function App() {
       {/* <Image source={require('./assets/splash.png')} height={10} width={10}></Image> */}
 
       <Button
+        color={'green'}
+        title='Click Me'
+        onPress={
+          () => { Alert.prompt('Taimoor give feedback', ' Its some App', text => console.log(text)) }
+        }
+      />
+
+
+
+      <Button
         // color={'green'}
         title='my Btn'
         onPress={() => Alert.alert("New Title Taimoor", "Are you ready ? Message ", [
