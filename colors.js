@@ -1,5 +1,5 @@
 export default {
-    primary: "red",
+    primary: "white",
     secondary: "blue",
     dark: "black",
 }
