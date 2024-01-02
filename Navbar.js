@@ -20,16 +20,37 @@ const Navbar = () => {
                         iconName = focused ? 'home' : 'home';
                     } else if (rn === 'Contact') {
                         iconName = focused ? 'list' : 'list';
-                    } else if (rn === 'Logout') {
-                        iconName = focused ? 'sign-out' : 'sign-out';
+                    } else if (rn === 'About') {
+                        iconName = focused ? 'info-circle' : 'info-circle';
                     }
                     return <Icon name={iconName} size={size} color={color} solid />;
                 },
             })}
+
+        // screenOptions={{
+        //     headerStyle: {
+        //       backgroundColor: '#00b386', // Set your desired header color here
+        //     },
+        //     headerTintColor: 'white', // Set text color of header buttons
+        //     headerTitleStyle: {
+        //       fontWeight: 'bold',
+        //     },
+        //   }}
         >
-            <Tab.Screen name="Home" component={Home} />
-            <Tab.Screen name="Contact" component={Contact} />
-            <Tab.Screen name="Logout" component={About} />
+
+            <Tab.Screen name="Home" component={Home}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <Tab.Screen name="Contact" component={Contact}
+                options={{
+                    headerShown: false
+                }} />
+            <Tab.Screen name="About" component={About}
+                options={{
+                    headerShown: false
+                }} />
         </Tab.Navigator>
     );
 };
