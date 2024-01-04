@@ -28,3 +28,7 @@ https://www.youtube.com/watch?v=wv0pii_-LuI
 short key
  rnfces
  https://github.com/calintamas/react-native-toast-message  
+
+
+ npm install @react-native-async-storage/async-storage
+ npm i toastify-react-native

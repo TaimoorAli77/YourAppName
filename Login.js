@@ -1,10 +1,12 @@
 import { View, StyleSheet, Text, SafeAreaView, StatusBar, Platform, TextInput, Button, TouchableOpacity } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';  // Import AsyncStorage
+
 import colors from './Colors.js'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import URL from './Url.js'
-import App from "./App.js";
+// import App from "./App.js";
 const Login = ({ navigation }) => {
     const handleSignupClick = () => {
         navigation.navigate('Signup')
@@ -30,25 +32,27 @@ const Login = ({ navigation }) => {
                     },
                     body: JSON.stringify(data)
                 })
-
                     .then(res => res.json()).then(
                         data => {
-                            console.log(data)
-                            setToken(data.token)
+                            let newToken = data.token
+                            if (data && data.token && data.token != null) {
+                                AsyncStorage.setItem('token', newToken);
+                                setToken(newToken)
+                            }
+                            console.log(newToken)
                             if (data.error) {
                                 setErrorMsg(data.error)
+                                console.log("data error ", data.error)
                             }
                             else {
                                 alert("Login Successful")
                                 navigation.navigate('DrawerNav', { token })
-
-
                             }
                         }
                     )
 
             } catch (error) {
-                errorMsg(error)
+                setErrorMsg("Check your credentials", error)
 
             }
 

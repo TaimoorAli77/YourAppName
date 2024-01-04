@@ -3,7 +3,7 @@ import Crop from "./pages/crop/Crop";
 // import Navbar from "./Navbar";
 import React, { useRef } from 'react';
 
-const Home = ({ navigation }) => {
+const Home = () => {
 
     const scrollY = useRef(new Animated.Value(0)).current;
 

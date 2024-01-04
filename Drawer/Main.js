@@ -6,10 +6,9 @@ import Logout from './Logout';
 
 const Main = () => {
     return (
-        <View >
-            {/* <Navbar /> */}
-            <Text>Hello from main component in drawer screen called Main</Text>
-        </View>
+        <Navbar />
+        // <Text>Hello</Text>
+
     )
 }
 

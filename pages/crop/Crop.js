@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Dialog, { DialogContent, DialogTitle, DialogFooter, DialogButton } from 'react-native-popup-dialog';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Alert } from 'react-native';
 import axios from 'axios';
 import URL from '../../Url';
+import AsyncStorage from '@react-native-async-storage/async-storage';  // Import AsyncStorage
+import ToastManager, { Toast } from 'toastify-react-native';
+import { useNavigation } from '@react-navigation/native';
+import _ from 'lodash';
 const Crop = () => {
     const [cropName, setCropName] = useState('');
     const [cropType, setCropType] = useState('');
@@ -10,7 +14,9 @@ const Crop = () => {
     const [area, setArea] = useState('');
     const [isDialogVisible, setDialogVisible] = useState(false);
     const [isLoading, setLoading] = useState(false);
-    const [errorMsg, setErrorMsg] = useState(null)
+    const [errorMsg, setErrorMsg] = useState(null);
+    const navigation = useNavigation();
+    const debouncedAddCropData = _.debounce(() => addCropData(), 1000, { leading: true, trailing: false });
     const showDialog = () => {
         setDialogVisible(true);
     };
@@ -18,6 +24,25 @@ const Crop = () => {
     const hideDialog = () => {
         setDialogVisible(false);
     };
+
+    const [token, setToken] = useState(null);
+
+    useEffect(() => {
+        // Retrieve token from local storage when the component mounts
+        retrieveToken();
+    }, []);
+
+    const retrieveToken = async () => {
+        try {
+            const storedToken = await AsyncStorage.getItem('token');
+            if (storedToken !== null) {
+                setToken(storedToken);
+            }
+        } catch (error) {
+            console.error('Error retrieving token:', error);
+        }
+    };
+
     const addCropData = async () => {
         try {
             if (cropName == "" || cropType == "" || cultivationDate == "" || area == "") {
@@ -26,11 +51,16 @@ const Crop = () => {
             }
             else {
                 setLoading(true); // Set loading to true while submitting
-                await axios.post(`${URL}/addCrop`, {
+                await axios.post(`${URL}/addcrop`, {
                     cropName,
                     cropType,
                     cultivationDate,
                     area,
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
                 });
                 console.log('Crop data added successfully');
                 // setCropName(''); setCultivationDate(""); setArea(''); setCropType('');
@@ -40,39 +70,24 @@ const Crop = () => {
                 // }, 5000);
                 // navigation.navigate('GetCrop')
                 // props.navigation.navigate('GetCrop')
+                Toast.success('Data Submitted Successfully!');
+
             }
         } catch (error) {
-            console.error('Error adding crop data ff: ', error);
+            console.error('Error adding crop data ff: ', token, error);
         } finally {
             setLoading(false); // Set loading back to false after submission
         }
         console.log('Add crops', { cropName, cropType, cultivationDate, area })
     };
 
-    return (<>
-        <Dialog
-            visible={isDialogVisible}
-            onTouchOutside={hideDialog}
-            dialogTitle={<DialogTitle title="Success" />}
-            footer={
-                <DialogFooter>
-                    {/* <DialogButton text="CANCEL" onPress={hideDialog} /> */}
-                    <DialogButton text="OK" onPress={hideDialog} />
-                </DialogFooter>
-            }
-        >
-            <DialogContent>
-                <View>
-                    <Text>Data has been submitted successfully!</Text>
-                </View>
-            </DialogContent>
-        </Dialog>
-
+    return (<View>
+        <ToastManager />
         <Text style={{
             textAlign: 'center', fontSize: 24, color: '#00b386',
             fontWeight: 'bold',
             marginBottom: 4,
-        }}>Crop</Text>
+        }}> Crop</Text>
         <KeyboardAvoidingView>
             <View style={styles.container}>
                 <Text style={styles.label}>Crop Name:</Text>
@@ -87,8 +102,8 @@ const Crop = () => {
                 <Text style={styles.label}>Area:</Text>
                 <TextInput style={styles.input} value={area} onChangeText={setArea} onPressIn={() => { setErrorMsg(null) }} />
 
-                <TouchableOpacity style={styles.button} onPress={addCropData}>
-                    {/* <Text style={styles.buttonText}>Add Crop Data</Text> */}
+                {/* <Text style={styles.buttonText}>Add Crop Data</Text> */}
+                <TouchableOpacity style={styles.button} onPress={debouncedAddCropData}>
                     {isLoading ? (
                         <ActivityIndicator size="small" color="white" />
                     ) : (
@@ -99,7 +114,7 @@ const Crop = () => {
                 {/* <Button  color={'#00b386'} title="Add Crop Data" onPress={addCropData} /> */}
             </View>
         </KeyboardAvoidingView>
-    </>
+    </View>
     )
 }
 

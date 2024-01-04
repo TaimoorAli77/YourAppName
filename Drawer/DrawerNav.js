@@ -15,11 +15,9 @@ const DrawerNav = () => {
     return (
         <>
             <Drawer.Navigator drawerContent={props => <ImageToUpload {...props} />}>
-                <Drawer.Screen name="Main" component={Main} />
+                {/* <Drawer.Screen name="Main" component={Main} /> */}
                 <Drawer.Screen name="Navbar" component={Navbar} />
-
                 {/* <Drawer.Screen name='Crops Detail History' component={GetCrop} /> */}
-
             </Drawer.Navigator>
         </>
     )

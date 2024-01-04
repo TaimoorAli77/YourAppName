@@ -45,6 +45,7 @@ const ImageToUpload = () => {
                     )}
                 </TouchableOpacity>
             </View>
+            <Text>Logout</Text>
             <Text style={styles.containerName}>{Name}</Text>
         </>
 
