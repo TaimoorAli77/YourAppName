@@ -38,6 +38,10 @@ const Login = ({ navigation }) => {
                             if (data && data.token && data.token != null) {
                                 AsyncStorage.setItem('token', newToken);
                                 setToken(newToken)
+                                setData({
+                                    email: "",
+                                    password: ""
+                                });
                             }
                             console.log(newToken)
                             if (data.error) {
@@ -50,14 +54,9 @@ const Login = ({ navigation }) => {
                             }
                         }
                     )
-
             } catch (error) {
                 setErrorMsg("Check your credentials", error)
-
             }
-
-
-
         }
     }
     return (
@@ -71,10 +70,12 @@ const Login = ({ navigation }) => {
                         errorMsg ? <Text style={{ color: "red" }}>{errorMsg}</Text> : null
                     }
                     <TextInput style={styles.inp} placeholder="Email" keyboardType="email-address"
+                        value={data.email}
                         onChangeText={(t) => { setData({ ...data, email: t }) }}
                         onPressIn={() => { setErrorMsg(null) }}
                     />
                     <TextInput style={styles.inp} placeholder="Password" secureTextEntry={true}
+                        value={data.password}
                         onChangeText={(t) => { setData({ ...data, password: t }) }}
                         onPressIn={() => { setErrorMsg(null) }}
                     />
