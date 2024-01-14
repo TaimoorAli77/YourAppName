@@ -51,7 +51,7 @@ const Crop = () => {
             }
             else {
                 setLoading(true); // Set loading to true while submitting
-                await axios.post(`${URL}/addcrop`, {
+                const response = await axios.post(`${URL}/addcrop`, {
                     cropName,
                     cropType,
                     cultivationDate,
@@ -71,7 +71,7 @@ const Crop = () => {
                 // navigation.navigate('GetCrop')
                 // props.navigation.navigate('GetCrop')
                 Toast.success('Data Submitted Successfully!');
-
+                navigation.navigate('CropDetail')
             }
         } catch (error) {
             console.error('Error adding crop data ff: ', token, error);
