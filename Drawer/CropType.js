@@ -9,36 +9,13 @@ import ToastManager, { Toast } from 'toastify-react-native';
 import { useEffect, useState } from 'react';
 import URL from '../Url';
 import axios from 'axios';
+import GetCropType from '../pages/crop/GetCropType';
 export default function CropType() {
     const [cropType, setCropType] = useState('');
     const [description, setDescription] = useState('');
+    const [profileImage, setProfileImage] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
 
-    const [profileImage, setProfileImage] = useState(null);
-    const addCropTypeData = async () => {
-        console.log(cropType, description)
-        try {
-            // const formData = new FormData();
-            // formData.append('cropType', cropType);
-            // formData.append('description', description);
-            // formData.append('image', profileImage.uri);
-
-            let response = await axios.post(`${URL}/croptype`, { cropType, description }
-                // , {
-                // headers: {
-                //     'Content-Type': 'multipart/form-data',
-                // },
-                // }
-            );
-            // console.log(response);
-            Alert.alert("Added successfully crop type data")
-            // Handle success or navigate to another screen
-        } catch (error) {
-            console.error("upload crop type formd", error);
-            // console.log(error.response)
-            // Handle error
-        }
-    }
     useEffect(() => {
         (async () => {
             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -56,9 +33,62 @@ export default function CropType() {
             quality: 1,
         });
         if (!result.canceled) {
-            setProfileImage({ uri: result.assets[0].uri });
+            setProfileImage(result?.assets[0]);
         }
     };
+    const addCropTypeData = async () => {
+        console.log(cropType, description, profileImage?.uri)
+        try {
+
+            const formData = new FormData();
+            formData.append('cropType', cropType);
+            formData.append('description', description);
+            if (!cropType) {
+                setErrorMsg('Error: Crop Type is required');
+                return;
+            }
+            if (!description) {
+                setErrorMsg('Error: Description is required');
+                return;
+            }
+            if (profileImage) {
+                formData.append('image', {
+                    uri: profileImage?.uri,
+                    type: 'image/jpeg',
+                    name: 'image.jpg',
+                });
+            } else {
+                setErrorMsg('Error: Image is required');
+                return;
+            }
+
+            // Check if description is empty
+            const response = await axios.post(`${URL}/croptype`, formData
+                , {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
+                }
+            );
+            Alert.alert("Added successfully crop type data")
+            console.log(response.data);
+            // Handle success or navigate to another screen
+            setCropType('');
+            setDescription('');
+            setProfileImage(null);
+
+        } catch (error) {
+            console.error("upload crop type formd", error);
+            // console.log(error.response)
+            // Handle error
+        }
+        // const cropData = {
+        //     imageUrl: '../images/one.png',
+        //     cropName: 'Tomatoes',
+        //     description: 'Tomatoes are red and delicious.',
+        // };
+
+    }
     return (<View>
         <ToastManager />
         <Text style={{
@@ -74,22 +104,31 @@ export default function CropType() {
                 <TextInput style={styles.input} value={description} onChangeText={setDescription} onPressIn={() => { setErrorMsg(null) }} />
                 <View >
                     <Text style={styles.label}>Add Crop Image:</Text>
-                    <TouchableOpacity onPress={selectImage}>
+                    <TouchableOpacity onPress={selectImage} onPressIn={() => { setErrorMsg(null) }}>
                         {profileImage ? (
-                            <Image source={{ uri: profileImage.uri }} style={styles.profileImage} />
+                            <Image source={{ uri: profileImage.uri }} style={styles.profileImage} name="image" />
                         ) : (
                             <Image
                                 source={require('../images/one.png')}
                                 style={styles.profileImage}
+                                name="image"
                             />
                         )}
                     </TouchableOpacity>
                 </View>
+                <Text style={{ color: 'red' }}>{errorMsg}</Text>
                 <TouchableOpacity style={styles.btn}>
                     <Button color={'black'} style={styles.btn} title="Add Crop Type Data" onPress={addCropTypeData} />
                 </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
+        <View style={styles.headingContainer}>
+            <Text style={styles.heading}>Crop Types Data Detail</Text>
+        </View>
+
+        <View style={styles.containerTwo}>
+            <GetCropType />
+        </View>
     </View>
     );
 }
@@ -142,4 +181,14 @@ const styles = StyleSheet.create({
         paddingLeft: 8,
         borderRadius: 10,
     },
+    headingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    heading: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    }
+
 })

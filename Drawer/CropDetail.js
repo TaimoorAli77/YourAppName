@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function CropDetail() {
     const [token, setToken] = useState();
-    const [cropData, setCropData] = useState([]);
+    const [cropData, setCropData] = useState();
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         getCropData();
