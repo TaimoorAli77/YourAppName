@@ -94,6 +94,9 @@ const ImageToUpload = ({ navigation }) => {
                 <TouchableOpacity onPress={() => navigateToScreen('CropType')}>
                     <Text style={styles.containerName}>Crop Type</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigateToScreen('CropTypeDetail')}>
+                    <Text style={styles.containerName}>Crop Type Detail</Text>
+                </TouchableOpacity>
                 {/* Add more drawer items as needed */}
             </View>
 

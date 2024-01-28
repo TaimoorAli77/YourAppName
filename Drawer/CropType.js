@@ -10,20 +10,33 @@ import { useEffect, useState } from 'react';
 import URL from '../Url';
 import axios from 'axios';
 import GetCropType from '../pages/crop/GetCropType';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 export default function CropType() {
     const [cropType, setCropType] = useState('');
     const [description, setDescription] = useState('');
     const [profileImage, setProfileImage] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
+    const navigation = useNavigation();
 
-    useEffect(() => {
-        (async () => {
-            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-            if (status !== 'granted') {
-                alert('Sorry, we need camera roll permissions to make this work!');
-            }
-        })();
-    }, []);
+    const [cropTypeData, setCropTypeData] = useState(null)
+
+    const cropTypeDataGet = async () => {
+        try {
+            const response = await axios.get(`${URL}/croptype`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Authorization': 'Bearer ' + token
+                }
+            });
+            // setCropTypeData(response?.data)
+            // console.log(response?.data)
+        } catch (error) {
+            console.log(error)
+
+        }
+
+    }
 
     const selectImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -70,12 +83,17 @@ export default function CropType() {
                     }
                 }
             );
+
             Alert.alert("Added successfully crop type data")
-            console.log(response.data);
+            setCropTypeData(response?.data)
+            cropTypeDataGet()
+            navigation.navigate('CropTypeDetail', { cropTypeData })
+            // setCropTypeData();
             // Handle success or navigate to another screen
             setCropType('');
             setDescription('');
             setProfileImage(null);
+            // cropTypeDataGet();
 
         } catch (error) {
             console.error("upload crop type formd", error);
@@ -89,6 +107,18 @@ export default function CropType() {
         // };
 
     }
+    // useEffect(() => {
+    //     cropTypeDataGet();
+
+    // }, [cropTypeData]);
+    useEffect(() => {
+        (async () => {
+            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            if (status !== 'granted') {
+                alert('Sorry, we need camera roll permissions to make this work!');
+            }
+        })();
+    }, []);
     return (<View>
         <ToastManager />
         <Text style={{
@@ -122,13 +152,13 @@ export default function CropType() {
                 </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
-        <View style={styles.headingContainer}>
-            <Text style={styles.heading}>Crop Types Data Detail</Text>
-        </View>
 
-        <View style={styles.containerTwo}>
-            <GetCropType />
-        </View>
+
+        {/* <View style={styles.containerTwo}> */}
+        {/* <View style={{ marginBottom: 16, paddingBottom: 16, height: 'auto' }}>
+            <GetCropType cropType={cropTypeData} />
+        </View> */}
+        {/* </View> */}
     </View>
     );
 }

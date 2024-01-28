@@ -1,2 +1,2 @@
-const URL = 'https://ae92-39-34-187-235.ngrok-free.app'
+const URL = 'https://ce30-39-34-184-10.ngrok-free.app'
 export default URL 

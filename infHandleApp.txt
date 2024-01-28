@@ -1,0 +1,4 @@
+delete and update options in crops management system
+separate user data for each user
+Next Steps Fawad bro said take 
+Learn Node and React Native (Focus just these two for next 3 to 5 years to be expert)

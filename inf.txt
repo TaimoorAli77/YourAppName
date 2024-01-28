@@ -36,3 +36,6 @@ short key
  npx expo install expo-image-picker
  add this in your app.json under expo
  "plugins": ["expo-image-picker"],
+
+
+ npm install react-native-fast-image

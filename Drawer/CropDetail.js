@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import URL from '../Url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 export default function CropDetail() {
     const [token, setToken] = useState();
     const [cropData, setCropData] = useState();
@@ -61,6 +60,8 @@ export default function CropDetail() {
             {/* Data Rows */}
             <FlatList
                 data={cropData}
+                initialNumToRender={10}
+                maxToRenderPerBatch={5}
                 renderItem={({ item, index }) => (
                     <View style={styles.itemView} key={index}>
                         <Text style={styles.cropName}>{item.cropName.length > 30 ? item.cropName.substring(0, 20) + '...' : item.cropName}</Text>

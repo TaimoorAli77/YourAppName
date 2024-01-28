@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, SafeAreaView, StatusBar, Platform, TextInput, Button, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, SafeAreaView, StatusBar, Platform, TextInput, Button, TouchableOpacity, ActivityIndicator } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';  // Import AsyncStorage
 
 import colors from './Colors.js'
@@ -13,6 +13,7 @@ const Login = ({ navigation }) => {
     }
     const [errorMsg, setErrorMsg] = useState(null);
     const [token, setToken] = useState("")
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
         email: "",
         password: ""
@@ -24,6 +25,7 @@ const Login = ({ navigation }) => {
             return;
         }
         else {
+            setLoading(true)
             try {
                 fetch(`${URL}/signin`, {
                     method: 'POST',
@@ -57,6 +59,9 @@ const Login = ({ navigation }) => {
             } catch (error) {
                 setErrorMsg("Check your credentials", error)
             }
+            finally {
+                setLoading(false)
+            }
         }
     }
     return (
@@ -86,6 +91,8 @@ const Login = ({ navigation }) => {
                 </View>
                 <Text style={{ paddingTop: 10 }}>Don't have an account? <Text style={{ color: "#00b386" }} onPress={handleSignupClick}>Sign up</Text></Text>
             </SafeAreaView>
+
+            {loading && <ActivityIndicator style={styles.activityIndicator} size="large" color="#00B386" />}
         </>
     );
 }
@@ -153,6 +160,9 @@ const styles = StyleSheet.create({
         right: 10,
         backgroundColor: colors.secondary,
     },
+    activityIndicator: {
+        marginTop: 20,
+    }
 })
 
 
