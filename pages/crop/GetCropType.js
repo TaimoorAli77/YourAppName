@@ -12,11 +12,13 @@ const GetCropType = ({ route }) => {
     const cropTypeDNew = route.params?.cropTypeData;
 
     useEffect(() => {
+        // console.log("NEw dara", cropTypeDNew)
         cropTypeDataGet();
-        if (cropTypeDNew != null) {
-            setCropTypeData(cropTypeDNew)
-        }
-    }, []);
+        // if (cropTypeDNew != null) {
+
+        //     setCropTypeData((prevData) => [...prevData, ...cropTypeDNew])
+        // }
+    }, [cropTypeDNew]);
 
     const cropTypeDataGet = useCallback(async () => {
         try {
@@ -30,12 +32,12 @@ const GetCropType = ({ route }) => {
             const newData = response?.data?.slice().reverse();
 
             // Check if there is more data available
-            if (newData.length === 0) {
-                setHasMoreData(false);
-                return;
-            }
+            // if (newData.length === 0) {
+            //     setHasMoreData(false);
+            //     return;
+            // }
 
-            setCropTypeData((prevData) => [...prevData, ...newData]);
+            setCropTypeData(newData);
             setPage(page + 1);
         } catch (error) {
             console.log(error);
@@ -66,6 +68,7 @@ const GetCropType = ({ route }) => {
     ));
 
     const Item = memo(({ item }) => (
+
         <View style={styles.itemContainer} key={item?._id}>
             <View style={styles.image}>
                 <MemoizedImage uri={`${URL}${item.image}`} />
@@ -75,36 +78,31 @@ const GetCropType = ({ route }) => {
                 <Text style={styles.description}>{item.description}</Text>
             </View>
         </View>
-    ), (prevProps, nextProps) => {
-        return prevProps.item._id === nextProps.item._id;
-    });
+    ));
 
 
-    const End = () => {
-        return <View><Text>End of Data.</Text> </View>
-    };
 
-    const handleEndReached = () => {
-        if (!loading) {
-            // cropTypeDataGet();
-            End();
-        }
-    };
+
+
 
     return (
         <View style={styles.container}>
             {/* ... existing code */}
             <SafeAreaView style={{ flex: 1 }}>
                 <VirtualizedList
-                    data={cropTypeData || null}
-                    keyExtractor={(item) => item.id.toString()}
+                    data={cropTypeData}
+                    keyExtractor={(item) => item._id}
                     renderItem={({ item }) => <Item item={item} />}
                     getItemCount={getItemCount}
                     getItem={getItem}
                     ListFooterComponent={renderFooter}
-                    onEndReached={handleEndReached}
                     onEndReachedThreshold={0.1}
                 />
+                {cropTypeData.length == 0 &&
+                    <View style={styles.noDataContainer}>
+                        <Text style={styles.noDataText}>There is nothing to show.</Text>
+                    </View>
+                }
             </SafeAreaView>
         </View>
     );
