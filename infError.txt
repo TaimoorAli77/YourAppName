@@ -1,0 +1,6 @@
+1. Should i  use context api or redux ? Which will be more suitable?
+2. Should i include edit and delete option too in all(crop,disease etc).
+3. There are two ways i have used to add crops . Which one Should i carry on . Or Should i carry on both if so what changings should i make(any reference , id etc)?
+4. Each user separately would save his data. Right? So I should be saving token  separately for each user.
+5. What is the end result of this project? 
+6. Should I buy Second-hand iphone for iOS app work checking.

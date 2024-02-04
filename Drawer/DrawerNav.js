@@ -9,7 +9,12 @@ import ImageToUpload from './ImageToUpload';
 import ProfileScreen from './ProfileScreen';
 import CropDetail from './CropDetail';
 import CropType from './CropType'
+import Disease from '../screens/Disease/Disease.js';
 import GetCrop from '../pages/crop/GetCropType';
+import GetDisease from '../screens/Disease/GetDisease.js';
+import DiseaseApp from '../screens/Disease/DiseasApp.js';
+import WeeklyProgress from '../screens/WeeklyGrowth/WeeklyProgress.js';
+import WProgressReport from '../screens/WeeklyGrowth/WProgressReport.js';
 // import GetCrop from '../pages/crop/GetCrop'
 // import Home from '../Home';
 const Drawer = createDrawerNavigator();
@@ -24,6 +29,12 @@ const DrawerNav = () => {
                 <Drawer.Screen name='CropDetail' component={CropDetail} />
                 <Drawer.Screen name='CropType' component={CropType} />
                 <Drawer.Screen name='CropTypeDetail' component={GetCrop} />
+                <Drawer.Screen name='DiseaseData' component={Disease} />
+                <Drawer.Screen name='DiseaseList' component={GetDisease} />
+                <Drawer.Screen name='WeeklyGrowth' component={WeeklyProgress} />
+                <Drawer.Screen name='WProgressReport' component={WProgressReport} />
+
+
                 {/* <Drawer.Screen name='Crops Detail History' component={GetCrop} /> */}
             </Drawer.Navigator>
         </>

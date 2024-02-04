@@ -17,6 +17,7 @@ export default function CropType() {
     const [description, setDescription] = useState('');
     const [profileImage, setProfileImage] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
+    const [loading, setLoading] = useState(false)
     const navigation = useNavigation();
 
     const [cropTypeData, setCropTypeData] = useState(null)
@@ -76,6 +77,7 @@ export default function CropType() {
             }
 
             // Check if description is empty
+            setLoading(true)
             const response = await axios.post(`${URL}/croptype`, formData
                 , {
                     headers: {
@@ -83,7 +85,7 @@ export default function CropType() {
                     }
                 }
             );
-
+            setLoading(false)
             Alert.alert("Added successfully crop type data")
             setCropTypeData(response?.data)
             cropTypeDataGet()
@@ -97,6 +99,7 @@ export default function CropType() {
 
         } catch (error) {
             console.error("upload crop type formd", error);
+            setLoading(false)
             // console.log(error.response)
             // Handle error
         }
@@ -125,7 +128,7 @@ export default function CropType() {
             textAlign: 'center', fontSize: 24, color: '#00b386',
             fontWeight: 'bold',
             marginBottom: 4,
-        }}> Crop</Text>
+        }}>Crop</Text>
         <KeyboardAvoidingView>
             <View style={styles.container}>
                 <Text style={styles.label}>Crop Type:</Text>
@@ -152,7 +155,11 @@ export default function CropType() {
                 </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
-
+        {loading &&
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#00B386" />
+            </View>
+        }
 
         {/* <View style={styles.containerTwo}> */}
         {/* <View style={{ marginBottom: 16, paddingBottom: 16, height: 'auto' }}>
@@ -175,6 +182,15 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         alignSelf: 'center',
     },
+    loadingContainer: {
+        ...StyleSheet.absoluteFillObject,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255,255,255,0.7)',
+
+
+    },
+
     btn: {
         width: '100%',
         borderRadius: 10,

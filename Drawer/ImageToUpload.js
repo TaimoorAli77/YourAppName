@@ -86,7 +86,7 @@ const ImageToUpload = ({ navigation }) => {
                     <Text style={styles.containerName}>Profile</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigateToScreen('Main')} token={token}>
-                    <Text style={styles.containerName}>Main</Text>
+                    <Text style={styles.containerName}>Crops</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigateToScreen('CropDetail')}>
                     <Text style={styles.containerName}>Crops Detail</Text>
@@ -96,6 +96,18 @@ const ImageToUpload = ({ navigation }) => {
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigateToScreen('CropTypeDetail')}>
                     <Text style={styles.containerName}>Crop Type Detail</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigateToScreen('DiseaseData')}>
+                    <Text style={styles.containerName}>Disease</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigateToScreen('DiseaseList')}>
+                    <Text style={styles.containerName}>Disease List</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigateToScreen('WeeklyGrowth')}>
+                    <Text style={styles.containerName}>Weekly Growth</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigateToScreen('WProgressReport')}>
+                    <Text style={styles.containerName}>Weekly Progress Report</Text>
                 </TouchableOpacity>
                 {/* Add more drawer items as needed */}
             </View>
