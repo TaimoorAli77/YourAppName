@@ -39,3 +39,5 @@ short key
 
 
  npm install react-native-fast-image
+
+ Flatlist Swipe to Delete using React Native Reanimated  ,,, Searched

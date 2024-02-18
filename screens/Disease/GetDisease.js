@@ -11,7 +11,7 @@ const GetDisease = ({ route }) => {
         const response = await axios.get(`${URL}/disease`)
         setGetDisease(response?.data)
     }
-    const DisDa = route.params?.diseaseData
+    const DisDa = route.params?.diseaseData || []
     useEffect(() => {
         GetDiseaseData();
     }, [DisDa])

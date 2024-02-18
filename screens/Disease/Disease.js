@@ -11,7 +11,11 @@ export default function Disease() {
   const [errorMsg, setErrorMsg] = useState(null);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null)
-  const [diseaseData, setGetDisease] = useState([])
+  const [diseaseData, setGetDisease] = useState([]);
+  const GetDiseaseDataFromBackend = async () => {
+    const response = await axios.get(`${URL}/disease`)
+    setGetDisease(response?.data)
+}
   const selectDiseaseImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -64,6 +68,7 @@ export default function Disease() {
       setImage(null)
       // GetDiseaseData()
       setGetDisease(response?.data)
+      // GetDiseaseDataFromBackend()
       navigation.navigate('DiseaseList', { diseaseData })
 
     } catch (error) {

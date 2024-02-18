@@ -1,42 +1,28 @@
 import axios from 'axios';
 import React, { useEffect, useState, useCallback, memo } from 'react';
-import { View, Image, Text, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
+import { View, Image, Text, StyleSheet, SafeAreaView, ActivityIndicator, Dimensions } from 'react-native';
 import { VirtualizedList } from 'react-native';
 import URL from '../../Url';
-
+import { FlatList, PanGestureHandler } from 'react-native-gesture-handler';
+import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 const GetCropType = ({ route }) => {
     const [cropTypeData, setCropTypeData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
-    const [hasMoreData, setHasMoreData] = useState(true);
     const cropTypeDNew = route.params?.cropTypeData;
-
     useEffect(() => {
-        // console.log("NEw dara", cropTypeDNew)
         cropTypeDataGet();
-        // if (cropTypeDNew != null) {
-
-        //     setCropTypeData((prevData) => [...prevData, ...cropTypeDNew])
-        // }
     }, [cropTypeDNew]);
 
     const cropTypeDataGet = useCallback(async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${URL}/croptype?page=${page}`, {
+            const response = await axios.get(`${URL}/croptype`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-
-            const newData = response?.data?.slice().reverse();
-
-            // Check if there is more data available
-            // if (newData.length === 0) {
-            //     setHasMoreData(false);
-            //     return;
-            // }
-
+            const newData = response?.data
             setCropTypeData(newData);
             setPage(page + 1);
         } catch (error) {
@@ -45,11 +31,9 @@ const GetCropType = ({ route }) => {
             setLoading(false);
         }
     }, [page]);
-
     const getItemCount = (data) => {
         return data.length;
     };
-
     const getItem = (data, index) => {
         const item = data[index];
         return {
@@ -67,42 +51,70 @@ const GetCropType = ({ route }) => {
         <Image source={{ uri }} style={{ width: 70, height: 70 }} />
     ));
 
-    const Item = memo(({ item }) => (
 
-        <View style={styles.itemContainer} key={item?._id}>
-            <View style={styles.image}>
-                <MemoizedImage uri={`${URL}${item.image}`} />
-            </View>
-            <View style={styles.textContainer}>
-                <Text style={styles.cropType}>{item.cropType}</Text>
-                <Text style={styles.description}>{item.description}</Text>
-            </View>
-        </View>
-    ));
+    const deviceWidth = Dimensions.get('window').width;
+    const threshold = -deviceWidth * 0.4;
+    const Item = memo(({ item }) => {
+        const dragX = useSharedValue(0);
+        const height = useSharedValue(65);
+        const opacity = useSharedValue(1)
+        const gestureHandler = useAnimatedGestureHandler({
+            onActive: (e) => {
+                dragX.value = e.translationX
+            },
+            onEnd: (e) => {
+                if (threshold < e.translationX) {
+                    dragX.value = withTiming(0)
+                } else {
+                    dragX.value = withTiming(-deviceWidth)
+                    height.value = withTiming(0)
+                    opacity.value = withTiming(0)
+                }
+            }
+        })
+        const itemContainerStyles = useAnimatedStyle(() => {
+            return {
+                transform: [
+                    {
+                        translateX: dragX.value
+                    }
+                ],
+                height: height.value,
+                opacity: opacity.value,
+                marginTop: opacity.value === 1 ? 10 : 0
+            }
+        })
 
-
-
-
-
-
+        return (<PanGestureHandler onGestureEvent={gestureHandler}>
+            <Animated.View style={[styles.itemContainer, itemContainerStyles]}>
+                <View style={styles.image}>
+                    <MemoizedImage uri={`${URL}${item.image}`} />
+                </View>
+                <View style={styles.textContainer}>
+                    <Text style={styles.cropType}>{item.cropType}</Text>
+                    <Text style={styles.description}>{item.description}</Text>
+                </View>
+            </Animated.View>
+        </PanGestureHandler>)
+    });
     return (
         <View style={styles.container}>
             {/* ... existing code */}
             <SafeAreaView style={{ flex: 1 }}>
-                <VirtualizedList
+                <FlatList
                     data={cropTypeData}
                     keyExtractor={(item) => item._id}
                     renderItem={({ item }) => <Item item={item} />}
-                    getItemCount={getItemCount}
-                    getItem={getItem}
+                    // getItemCount={getItemCount}
+                    // getItem={getItem}
                     ListFooterComponent={renderFooter}
-                    onEndReachedThreshold={0.1}
+                // onEndReachedThreshold={0.1}
                 />
-                {cropTypeData.length == 0 &&
+                {/* {cropTypeData.length == 0 &&
                     <View style={styles.noDataContainer}>
                         <Text style={styles.noDataText}>There is nothing to show.</Text>
                     </View>
-                }
+                } */}
             </SafeAreaView>
         </View>
     );
@@ -119,7 +131,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 16,
+        // padding: 16,
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
     },

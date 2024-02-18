@@ -9,6 +9,7 @@ import {
     FlatList,
     TouchableOpacity,
     StyleSheet,
+    ScrollView,
 } from 'react-native';
 import URL from '../../Url';
 import axios from 'axios';
@@ -55,6 +56,12 @@ const WProgressReport = () => {
     const closeModal = () => {
         setModalVisible(false);
     };
+    const getHeader = () => {
+        <Text style={styles.heading}>Crops Weekly Growth</Text>
+    }
+    const getFooter = () => {
+
+    }
 
     const submitWeeklyGrowth = () => {
         // Add the new weekly growth data to the array
@@ -75,7 +82,7 @@ const WProgressReport = () => {
 
     const renderWeeklyGrowthItem = ({ item }) => (
         <View style={styles.card}>
-            <Text>Week {item.weekNumber}</Text>
+            <Text >Week {item.weekNumber}</Text>
             <Text>Size: {item.size}</Text>
             {item.imageURL && <Image source={{ uri: item.imageURL }} style={styles.image} />}
             <Text>Notes: {item.notes}</Text>
@@ -84,51 +91,65 @@ const WProgressReport = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.heading}>Crops Weekly Growth</Text>
-            {cropType && cropType.map((item, index) => (
-                <Text key={index}>{item.cropType} crop</Text>
-            ))}
-            {/* Button to Add Weekly Growth */}
-            <Button title="Add Weekly Growth" onPress={openModal} />
+            {/* <ScrollView> */}
+            <ScrollView
+                horizontal
+                contentContainerStyle={styles.scrollContent}
+                showsHorizontalScrollIndicator={false}
+            >
+                {/* <Text style={styles.heading}>Crops Weekly Growth</Text> */}
+                {cropType && cropType.map((item, index) => (
+                    <View key={index}>
+                        <Text style={styles.heading}>{item.cropType} crop</Text>
+                        <FlatList
+                            data={weeklyGrowthData}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={renderWeeklyGrowthItem}
+                            ListHeaderComponent={getHeader}
+                        // ListFooterComponent={getFooter}
+                        />
+                        {/* <Button  onPress={openModal} style={styles.btn}/> */}
+                        <TouchableOpacity style={styles.btn} >
+                            <Button style={styles.btn} color={'#00b386'} title="Add Weekly Growth" onPress={openModal} />
+                        </TouchableOpacity>
+                    </View>
+                ))}
+                {/* Button to Add Weekly Growth */}
 
-            {/* Modal for Adding Weekly Growth */}
-            <Modal visible={modalVisible} onRequestClose={closeModal}>
-                <View style={styles.modalContainer}>
-                    <Text>Add Weekly Growth</Text>
-                    <TextInput
-                        placeholder="Week Number"
-                        value={weekNumber}
-                        onChangeText={(text) => setWeekNumber(text)}
-                    />
-                    <TextInput
-                        placeholder="Size"
-                        value={size}
-                        onChangeText={(text) => setSize(text)}
-                    />
-                    <TextInput
-                        placeholder="Image URL"
-                        value={imageURL}
-                        onChangeText={(text) => setImageURL(text)}
-                    />
-                    <TextInput
-                        placeholder="Notes"
-                        value={notes}
-                        onChangeText={(text) => setNotes(text)}
-                    />
-                    <Button title="Submit" onPress={submitWeeklyGrowth} />
-                    <Button title="Cancel" onPress={closeModal} />
-                </View>
-            </Modal>
+                {/* Modal for Adding Weekly Growth */}
+                <Modal visible={modalVisible} onRequestClose={closeModal}>
+                    <View style={styles.modalContainer}>
+                        <Text>Add Weekly Growth</Text>
+                        <TextInput
+                            placeholder="Week Number"
+                            value={weekNumber}
+                            onChangeText={(text) => setWeekNumber(text)}
+                        />
+                        <TextInput
+                            placeholder="Size"
+                            value={size}
+                            onChangeText={(text) => setSize(text)}
+                        />
+                        <TextInput
+                            placeholder="Image URL"
+                            value={imageURL}
+                            onChangeText={(text) => setImageURL(text)}
+                        />
+                        <TextInput
+                            placeholder="Notes"
+                            value={notes}
+                            onChangeText={(text) => setNotes(text)}
+                        />
+                        <Button title="Submit" onPress={submitWeeklyGrowth} />
+                        <Button title="Cancel" onPress={closeModal} />
+                    </View>
+                </Modal>
 
-            {/* Button to View Weekly Growth */}
-            <Button title="View Weekly Growth of Crop" onPress={() => { }} />
+                {/* Button to View Weekly Growth */}
+                {/* <Button title="View Weekly Growth of Crop" onPress={() => { }} /> */}
 
-            {/* FlatList to Display Weekly Growth */}
-            <FlatList
-                data={weeklyGrowthData}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={renderWeeklyGrowthItem}
-            />
+                {/* FlatList to Display Weekly Growth */}
+            </ScrollView>
         </View>
     );
 };
@@ -137,6 +158,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
+    },
+    scrollContent: {
+        flexDirection: 'row', // Horizontal layout
+    },
+    item: {
+        paddingHorizontal: 10,
+        paddingVertical: 5
     },
     modalContainer: {
         flex: 1,
@@ -149,6 +177,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         borderRadius: 8,
         elevation: 2,
+        marginRight: 5
     },
     heading: {
         fontSize: 20,
@@ -163,6 +192,12 @@ const styles = StyleSheet.create({
         height: 200,
         marginTop: 8,
         borderRadius: 8,
+    },
+    btn: {
+        elevation: 0,
+        backgroundColor: "white",
+        borderRadius: 10,
+        margin: 20
     },
 });
 
